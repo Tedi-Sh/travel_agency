@@ -1,0 +1,77 @@
+Main system functions
+ Main page
+Configuring the trip offer (administrator)
+ Searching for trips by given criteria
+ "Purchase" of the trip - calculate amount to pay based the number of people
+Technologies
+ Django
+ (optional) Frontend in Angular and Django REST Framework
+
+Basic entities (proposal)
+Country
+ name
+City
+ name
+ belonging to the country (foreign key)
+Hotel
+ name
+ standard (stars)
+ description
+ belonging to the city (foreign key)
+ price for an adult
+ price for a child
+Airport
+ name
+ belonging to the city (foreign key)
+Trip
+ where from (City, Airport)
+ where to (City, Hotel, Airport)
+ departure date
+ return date
+ type: (BB - bed & breakfast, HB – half board, FB – full board, AI – all inclusive
+)
+ number of places for adults
+ number of places for children
+Purchase of a trip
+ trip
+ participant details
+ amount
+Functionalities
+ Home page
+ Home
+ Paketa turistike
+ Oferta
+ Rreth nesh
+ User(Log in)
+ presentation of promoted trips
+ presentation of upcoming trips (globally)
+ presentation of upcoming trips (by country)
+ country, city, hotel should be clickable and lead to search results
+ after clicking on a specific tour, detailed information is presented
+ (optional) below the trip we present trips to the same place, but with a later
+date
+ (optional) below the trip we present trips to other hotels from this city
+ (optional) under the trip we present trips to other cities from this country
+Setting up a tour offer
+ the administrator (on a separate page) can add and edit tours
+ the form should make it possible to enter all the parameters of the trip
+ you must pre-configure the database of countries, cities, airports and hotels
+ (optional) separate sites for managing countries, cities, airports and hotels
+Searching for trips by given criteria
+ all clickable elements (countries, cities, hotels direct to search results page)
+ in addition, the page has a form for filtering and sorting results
+ You can search for trips by: city (airport) of departure city (Hotel) of stay
+departure date (optional range) return date (optional range) type (BB, HB, FB,
+AI) hotel standard number of days
+ you can sort by: price departure date
+ (optional) as the number of trips increases, you can enter paging search results
+Purchase of a trip
+ after choosing a specific trip, you can buy it
+ specify the number of adults and children
+ the price for a trip will be calculated (based on the number of people)
+ purchased trips are presented on the administrative page / pages
+ (optional), you can group these tritrps accordingly and add a simple search
+engine
+Additional requirements
+ it is necessary to ensure an aesthetic and functional way of presenting data
+ data collected from users should be pre-validated
