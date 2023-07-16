@@ -40,8 +40,8 @@ class Airport(models.Model):
 
 
 class Price(models.Model):
-    airport_price = models.ForeignKey(Airport.price, on_delete=models.RESTRICT)
-    hotel_price = models.ForeignKey(Hotel.price, on_delete=models.RESTRICT)
+    airport_price = models.ForeignKey(Airport, related_name='airport_price', on_delete=models.RESTRICT)
+    hotel_price = models.ForeignKey(Hotel, related_name='hotel_price', on_delete=models.RESTRICT)
 
 
 
