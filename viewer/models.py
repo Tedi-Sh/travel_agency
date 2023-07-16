@@ -1,43 +1,54 @@
-from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models import (
-    RESTRICT, DO_NOTHING, CharField, DateField, DateTimeField, ForeignKey, IntegerField,
-    Model, TextField
-)
+
+from django.db import models
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 
-# Create your models here.
-
-class Country(Model):
-    name = CharField(max_length=128)  # , blank=False, null=False)
+class Country(models.Model):
+    name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
-class City(Model):
-    name = CharField(max_length=128)  # , blank=False, null=False)
-    country = ForeignKey(Country, on_delete=RESTRICT)
-
-    def __str__(self):
-        return self.name
-
-
-class Hotel(Model):
-    name = CharField(max_length=128)  # , blank=False, null=False)
-    stars = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    description = TextField()
-    city = ForeignKey(City, on_delete=RESTRICT)
+class City(models.Model):
+    name = models.CharField(max_length=50)
+    belong_to_country = models.ForeignKey(Country, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
-class Airport(Model):
-    name = CharField(max_length=128)
-    city = ForeignKey(City, on_delete=RESTRICT)
+class Hotel(models.Model):
+    name = models.CharField(max_length=100)
+    stars = models.IntegerField(validators=[MinLengthValidator(0), MaxLengthValidator(5)])
+
+    descriptions = models.TextField(null=False)
+    belong_to_city = models.ForeignKey(City, on_delete=models.RESTRICT)
+    price = models.IntegerField(null=False)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
+
+
+class Airport(models.Model):
+    name = models.CharField(max_length=100, null=False)
+    belong_to_city = models.ForeignKey(City, on_delete=models.RESTRICT)
+    price = models.IntegerField(null=False)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Price(models.Model):
+    airport_price = models.ForeignKey(Airport.price, on_delete=models.RESTRICT)
+    hotel_price = models.ForeignKey(Hotel.price, on_delete=models.RESTRICT)
+
+
+
+
+
+
+
+
 
 
