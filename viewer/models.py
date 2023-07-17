@@ -1,4 +1,4 @@
-from django.db.models import IntegerField, CharField, ForeignKey, RESTRICT, TextField, Model
+from django.db.models import IntegerField, CharField, ForeignKey, RESTRICT, TextField, Model, DO_NOTHING
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 
@@ -11,7 +11,7 @@ class Country(Model):
 
 class City(Model):
     name = CharField(max_length=50)
-    belong_to_country = ForeignKey(Country, on_delete=RESTRICT)
+    belong_to_country = ForeignKey(Country, on_delete=DO_NOTHING)
 
     def __str__(self):
         return f"{self.name}"
@@ -22,7 +22,7 @@ class Hotel(Model):
     stars = IntegerField(validators=[MinLengthValidator(0), MaxLengthValidator(5)])
 
     descriptions = TextField(max_length=255)
-    belong_to_city = ForeignKey(City, on_delete=RESTRICT)
+    belong_to_city = ForeignKey(City, on_delete=DO_NOTHING)
     price = IntegerField(validators=[MinLengthValidator(1)])
 
     def __str__(self):
@@ -31,7 +31,7 @@ class Hotel(Model):
 
 class Airport(Model):
     name = CharField(max_length=100)
-    belong_to_city = ForeignKey(City, on_delete=RESTRICT)
+    belong_to_city = ForeignKey(City, on_delete=DO_NOTHING)
     price = IntegerField(validators=[MinLengthValidator(1)])
 
     def __str__(self):
@@ -39,5 +39,5 @@ class Airport(Model):
 
 
 class Price(Model):
-    airport_price = ForeignKey(Airport, related_name='airport_price', on_delete=RESTRICT)
-    hotel_price = ForeignKey(Hotel, related_name='hotel_price', on_delete=RESTRICT)
+    airport_price = ForeignKey(Airport, related_name='airport_price', on_delete=DO_NOTHING)
+    hotel_price = ForeignKey(Hotel, related_name='hotel_price', on_delete=DO_NOTHING)
