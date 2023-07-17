@@ -9,7 +9,7 @@ def home(request):
     return HttpResponse("Hello..........")
 
 
-from django.shortcuts import render
+
 
 
 class SearchForm:
