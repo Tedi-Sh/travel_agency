@@ -1,8 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.shortcuts import render
-from viewer.forms import SearchForm
 from viewer.models import Hotel, Airport
+
+
+def home(request):
+    return HttpResponse("Hello..........")
+
+
+class SearchForm:
+    pass
 
 
 def search(request):
