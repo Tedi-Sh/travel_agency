@@ -18,9 +18,9 @@ class City(Model):
 
 
 class Hotel(Model):
+
     name = CharField(max_length=100)
     stars = IntegerField(validators=[MinLengthValidator(0), MaxLengthValidator(5)])
-
     descriptions = TextField(max_length=255)
     belong_to_city = ForeignKey(City, on_delete=DO_NOTHING)
     price = IntegerField(validators=[MinLengthValidator(1)])
@@ -32,7 +32,7 @@ class Hotel(Model):
 class Airport(Model):
     name = CharField(max_length=100)
     belong_to_city = ForeignKey(City, on_delete=DO_NOTHING)
-    price = IntegerField(validators=[MinLengthValidator(1)])
+    price = IntegerField(default=0) #default = 0
 
     def __str__(self):
         return f"{self.name}"
