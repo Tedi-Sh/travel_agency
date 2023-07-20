@@ -26,3 +26,4 @@ def search(request):
     else:
         form = SearchForm()
     return render(request, 'search.html', {'form': form})
+
