@@ -20,7 +20,6 @@ class City(Model):
 class Hotel(Model):
     name = CharField(max_length=100)
     stars = IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
-
     descriptions = TextField(max_length=255)
     belong_to_city = ForeignKey(City, on_delete=RESTRICT)
     price = IntegerField(validators=[MinValueValidator(1)])
