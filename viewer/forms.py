@@ -1,17 +1,9 @@
+from django.forms import DateField, Select, NumberInput, IntegerField, Form, SelectDateWidget, ChoiceField
+from viewer.models import Airport
 from django.core.exceptions import ValidationError
-from django.forms import DateField, CharField, IntegerField, Form, SelectDateWidget, ChoiceField, ModelChoiceField
-
-from viewer.models import City, Hotel
-
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.forms import DateField, CharField, IntegerField, Form, SelectDateWidget, ChoiceField, ModelChoiceField
-from django.shortcuts import render
-from django.template.context_processors import request
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class SignUpForm(UserCreationForm):
@@ -42,54 +34,29 @@ class SignUpForm(UserCreationForm):
         self.fields[
             'password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
 
-# class AddTrip(forms.ModelForm):
-#     class Meta:
-#         model = Trip
-#         fields = (
-#             'from_city',
-#             'from_airport',
-#             'to_city',
-#             'to_airport',
-#             'departure_date',
-#             'return_date',
-#             'nr_adults',
-#             'places_for_children'
-#         )
+    # class AddTrip(forms.ModelForm):
+    #     class Meta:
+    #         model = Trip
+    #         fields = (
+    #             'from_city',
+    #             'from_airport',
+    #             'to_city',
+    #             'to_airport',
+    #             'departure_date',
+    #             'return_date',
+    #             'nr_adults',
+    #             'places_for_children'
+    #         )
 
-
-
-
-
-
-
-
-
-# class AddNewTrip(forms.ModelForm):
-#
-#     class Meta:
-#         model = Trip
-#         fields = ('from_city', 'from_airport',
-#                   'to_city', 'to_airport',
-#                   'deperture_date', 'return_date',
-#                   'nr_adults', 'places_for_children'
-#                   )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # class AddNewTrip(forms.ModelForm):
+    #
+    #     class Meta:
+    #         model = Trip
+    #         fields = ('from_city', 'from_airport',
+    #                   'to_city', 'to_airport',
+    #                   'deperture_date', 'return_date',
+    #                   'nr_adults', 'places_for_children'
+    #                   )
 
     # class Trip(Model):
     #     Board_TYPES = [
@@ -113,26 +80,50 @@ class SignUpForm(UserCreationForm):
     #         raise ValidationError('Error')
 
 
+class SearchForm(Form):
+    TRIP_TYPES = [
+        ('BB', 'Bed & Breakfast'),
+        ('HB', 'Half Board'),
+        ('FB', 'Full Board'),
+        ('AI', 'All Inclusive')
+    ]
 
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        get_airports = Airport.objects.all()
+        self.fields['from_location'] = ChoiceField(
+            choices=[(airport.id, f'{airport.belong_to_city.name} - {airport.name}')
+                     for airport in get_airports
+                     ],
+            widget=Select(attrs={'class': 'form-control'}),
+            label='From'
+        )
+        self.fields['to_location'] = ChoiceField(
+            choices=[(airport.id, f'{airport.belong_to_city.name} - {airport.name}')
+                     for airport in get_airports
+                     ],
+            widget=Select(attrs={'class': 'form-control'}),
+            label='To'
+        )
 
+    date_of_departure = DateField(widget=SelectDateWidget(attrs={'class': 'form-control'}))
+    return_date = DateField(widget=SelectDateWidget(attrs={'class': 'form-control'}))
+    number_of_adults = IntegerField(min_value=1, widget=NumberInput(attrs={'class': 'form-control'}),
+                                    label='Nr. of Adults', initial=1)
+    number_of_children = IntegerField(min_value=0, widget=NumberInput(attrs={'class': 'form-control'}),
+                                      label='Nr. of Children', initial=0)
+    trip_type = ChoiceField(choices=TRIP_TYPES, widget=Select(attrs={'class': 'form-control'}))
 
-    # class Trip(Model):
-    #     Board_TYPES = [
-    #         ('BB', 'Bed and Breakfast'),
-    #         ('HB', 'Half Board'),
-    #         ('FB', 'Full Board'),
-    #         ('AI', 'All Inclusive')
-    #     ]
-    #     from_city = ForeignKey(City, related_name='departure_trips', on_delete=RESTRICT)
-    #     from_airport = ForeignKey(Airport, related_name='departure_trips', on_delete=RESTRICT)
-    #     to_city = ForeignKey(City, related_name='arrival_trips', on_delete=RESTRICT)
-    #     to_airport = ForeignKey(Airport, related_name='arrival_trips', on_delete=RESTRICT)
-    #     departure_date = DateField()
-    #     return_date = DateField()
-    #     board_type = CharField(max_length=2, choices=Board_TYPES)
-    #     nr_adults = IntegerField()
-    #     places_for_children = IntegerField()
+    def clean(self):
+        cleaned_data = super().clean()
+        date_of_departure = cleaned_data.get('date_of_departure')
+        return_date = cleaned_data.get('return_date')
 
-    def date_check(self):
-        if self.return_date <= self.departure_date:
-            raise ValidationError('Error')
+        if date_of_departure and return_date:
+            if return_date < date_of_departure:
+                raise ValidationError({
+                    'return_date': ValidationError(
+                        _('Return date cannot be before departure date.'),
+                        code='invalid'
+                    ),
+                })

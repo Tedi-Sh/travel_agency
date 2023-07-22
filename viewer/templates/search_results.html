@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <!-- Add Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2>Search Results</h2>
+
+    <h3>Hotels:</h3>
+    {% for hotel in hotels %}
+        <div>
+            <h4>{{ hotel.name }}</h4>
+            <p>{{ hotel.descriptions }}</p>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>
