@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="container form-container">
+        <h2>Destinations</h2>
+        <form method="GET" action="/search" class="form-row">
+            <label for="from_city">From: </label>
+            <select id="from_city" name="from_city">
+                {% for city in cities %}
+                    <option value="{{ city.id }}">{{ city.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="to_city">To :</label>
+            <select id="to_city" name="to_city">
+                {% for city in cities %}
+                    <option value="{{ city.id }}">{{ city.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="departure_date">Departure:</label>
+            <input type="date" id="departure_date" name="departure_date">
+
+            <label for="return_date">Return:</label>
+            <input type="date" id="return_date" name="return_date">
+
+            <label for="guests">Guests:</label>
+            <select id="guests" name="guests">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+
+
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <link rel="stylesheet" type="text/css" href="../../static/CSS/search_bar.css">
+{% endblock %}
