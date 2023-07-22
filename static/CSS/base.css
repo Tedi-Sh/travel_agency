@@ -1,8 +1,4 @@
-body {
-    background-image: url('../../static/Images/background.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+
 
 .navbar-brand {
     margin-right: 20px;
@@ -11,3 +7,4 @@ body {
 .navbar-nav {
     margin-left: 50px;
 }
+
