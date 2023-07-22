@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>User</h1>
+    <p>Please login to access your account:</p>
+
+    <!-- Login form goes here -->
+
+    {% if user.is_authenticated %}
+        <p>You are already logged in as {{ user.username }}.</p>
+        <p>Proceed to <a href="{% url 'logout' %}">logout</a> if you want to sign in with a different account.</p>
+    {% else %}
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <!-- Login form fields -->
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+
+           <input type="submit" value="Login">
+        </form>
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a> here.</p>
+    {% endif %}
+{% endblock %}
