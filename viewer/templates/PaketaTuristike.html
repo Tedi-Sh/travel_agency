@@ -1,20 +1,10 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
 
-{% block content %}
-    <h1>Paketa Turistike</h1>
-    <p>Check out our exciting travel packages below:</p>
-    <!-- Package content goes here -->
-
-    <div class="package-container">
-        {% for package in packages %}
-            <div class="package">
-                <h2>{{ package.name }}</h2>
-                <p>{{ package.description }}</p>
-                <p>Price: {{ package.price }}</p>
-                <p>Duration: {{ package.duration }}</p>
-            </div>
-        {% empty %}
-            <p>No travel packages available at the moment.</p>
-        {% endfor %}
-    </div>
-{% endblock %}
+</body>
+</html>

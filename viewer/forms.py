@@ -1,25 +1,90 @@
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import DateField, CharField, IntegerField, Form, SelectDateWidget, ChoiceField, ModelChoiceField
+from django.shortcuts import render
+from django.template.context_processors import request
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
-from viewer.models import City, Hotel
+
+class SignUpForm(UserCreationForm):
+    pass
+
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        super(SignUpForm, self).__init__(*args, **kwargs)
+
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs['placeholder'] = 'User Name'
+        self.fields['username'].label = ''
+        self.fields[
+            'username'].help_text = '<span class="form-text text-muted"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
+
+        self.fields['password1'].widget.attrs['class'] = 'form-control'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Password'
+        self.fields['password1'].label = ''
+        self.fields[
+            'password1'].help_text = '<ul class="form-text text-muted small"><li>Your password can\'t be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can\'t be a commonly used password.</li><li>Your password can\'t be entirely numeric.</li></ul>'
+
+        self.fields['password2'].widget.attrs['class'] = 'form-control'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
+        self.fields['password2'].label = ''
+        self.fields[
+            'password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
+
+# class AddTrip(forms.ModelForm):
+#     class Meta:
+#         model = Trip
+#         fields = (
+#             'from_city',
+#             'from_airport',
+#             'to_city',
+#             'to_airport',
+#             'departure_date',
+#             'return_date',
+#             'nr_adults',
+#             'places_for_children'
+#         )
 
 
-class SearchForm(Form):
-    TRIP_TYPE_CHOICES = [
-        ('BB', 'Bed & Breakfast'),
-        ('HB', 'Half Board'),
-        ('FB', 'Full Board'),
-        ('AI', 'All Inclusive')
-    ]
 
-    from_city = ModelChoiceField(queryset=City.objects.all(), label='From')
-    to_city = ModelChoiceField(queryset=City.objects.all(), label='To')
-    hotel = ModelChoiceField(queryset=Hotel.objects.all(), required=False, label='Hotel')
-    departure_date = DateField(widget=SelectDateWidget, label='Departure Date')
-    return_date = DateField(widget=SelectDateWidget, label='Return Date')
-    trip_type = ChoiceField(choices=TRIP_TYPE_CHOICES, label='Trip Type')
-    num_adults = IntegerField(min_value=1, label='Number of Adults')
-    num_children = IntegerField(min_value=0, label='Number of Children')
+
+
+
+
+
+
+# class AddNewTrip(forms.ModelForm):
+#
+#     class Meta:
+#         model = Trip
+#         fields = ('from_city', 'from_airport',
+#                   'to_city', 'to_airport',
+#                   'deperture_date', 'return_date',
+#                   'nr_adults', 'places_for_children'
+#                   )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # class Trip(Model):
     #     Board_TYPES = [
@@ -38,6 +103,6 @@ class SearchForm(Form):
     #     nr_adults = IntegerField()
     #     places_for_children = IntegerField()
 
-    def date_check(self):
-        if self.return_date <= self.departure_date:
-            raise ValidationError('Error')
+    # def date_check(self):
+    #     if self.return_date <= self.departure_date:
+    #         raise ValidationError('Error')
