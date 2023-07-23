@@ -81,12 +81,6 @@ class SignUpForm(UserCreationForm):
 
 
 class SearchForm(Form):
-    TRIP_TYPES = [
-        ('BB', 'Bed & Breakfast'),
-        ('HB', 'Half Board'),
-        ('FB', 'Full Board'),
-        ('AI', 'All Inclusive')
-    ]
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
@@ -112,7 +106,6 @@ class SearchForm(Form):
                                     label='Nr. of Adults', initial=1)
     number_of_children = IntegerField(min_value=0, widget=NumberInput(attrs={'class': 'form-control'}),
                                       label='Nr. of Children', initial=0)
-    trip_type = ChoiceField(choices=TRIP_TYPES, widget=Select(attrs={'class': 'form-control'}))
 
     def clean(self):
         cleaned_data = super().clean()

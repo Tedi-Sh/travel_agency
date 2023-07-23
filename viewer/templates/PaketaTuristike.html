@@ -1,10 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'base.html' %}
+​
+{% comment %}
+{% block content %}
+    <h1>Paketa Turistike</h1>
+    <p>Check out our exciting travel packages below:</p>
+    <!-- Package content goes here -->
+​
+    <div class="package-container">
+        {% for package in packages %}
+            <div class="package">
+                <h2>{{ package.name }}</h2>
+                <p>{{ package.description }}</p>
+                <p>Price: {{ package.price }}</p>
+                <p>Duration: {{ package.duration }}</p>
+            </div>
+        {% empty %}
+            <p>No travel packages available at the moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% endcomment %}
+<!-- paketa_turistike.html -->
+<!-- paketa_turistike.html -->
+​
+{% comment %}{% block content %}
+    <h1>Paketa Turistike</h1>
+    <p>Check out our exciting travel packages below:</p>
+​
+    <div class="package-container">
+        {% for trip in packages %}
+            <div class="package">
+                <h2>{{ trip.from_city }} to {{ trip.to_city }}</h2>
+                <p>Departure Date: {{ trip.departure_date }}</p>
+                <p>Return Date: {{ trip.return_date }}</p>
+                <p>Number of Adults: {{ trip.nr_adults }}</p>
+                <p>Number of Places for Children: {{ trip.places_for_children }}</p>
+            </div>
+        {% empty %}
+            <p>No travel packages available at the moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}{% endcomment %}
+​
+<!-- paketa_turistike.html -->
+​
+​
+{% block content %}
+​
+    {% comment %}<style>
+        /* Your custom CSS code here */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+​
+        /* Additional custom styles */
+    </style>{% endcomment %}
+    <div class="container">
+        <h1 class="mt-5">Paketa Turistike</h1>
+        <p>Check out our exciting travel packages below:</p>
+​
+        <div class="row">
+            {% for trip in packages %}
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2 class="card-title">{{ trip.from_city }} to {{ trip.to_city }}</h2>
+                            <p class="card-text">Departure Date: {{ trip.departure_date }}</p>
+                            <p class="card-text">Return Date: {{ trip.return_date }}</p>
+                            <p class="card-text">Number of Adults: {{ trip.nr_adults }}</p>
+                            <p class="card-text">Number of Places for Children: {{ trip.places_for_children }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col">
+                    <p>No travel packages available at the moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <link rel="stylesheet" type="text/css" href="../../static/CSS/paketa_turistike.css">
+{% endblock %}
+​
