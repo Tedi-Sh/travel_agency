@@ -51,7 +51,6 @@ def search(request):
             return_date = form.cleaned_data.get('return_date')
             number_of_adults = form.cleaned_data.get('number_of_adults')
             number_of_children = form.cleaned_data.get('number_of_children')
-            trip_type = form.cleaned_data.get('trip_type')  # optional connected to Class Hotel(Model)
             destination_airport = Airport.objects.get(pk=to_location)
             hotels = Hotel.objects.filter(belong_to_city=destination_airport.belong_to_city)
             return render(request, 'search_results.html', {
@@ -59,4 +58,5 @@ def search(request):
             })
     else:
         form = SearchForm()
+
     return render(request, 'search.html', {'form': form})
