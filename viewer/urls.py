@@ -1,9 +1,9 @@
 from django.urls import path
-from . import views
-from .views import search
+from .views import search, create_reservation, trips_view
 
 urlpatterns = [
-    # path('', views.home, name='home'),
     path('search/', search, name='search'),
+    path('create_reservation/', create_reservation, name='create_reservation'),
+    path('trips_view/', trips_view, name='trips_view')
 
 ]
