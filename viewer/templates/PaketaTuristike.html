@@ -1,86 +1,51 @@
-{% extends 'base.html' %}
-​
-{% comment %}
-{% block content %}
-    <h1>Paketa Turistike</h1>
-    <p>Check out our exciting travel packages below:</p>
-    <!-- Package content goes here -->
-​
-    <div class="package-container">
-        {% for package in packages %}
-            <div class="package">
-                <h2>{{ package.name }}</h2>
-                <p>{{ package.description }}</p>
-                <p>Price: {{ package.price }}</p>
-                <p>Duration: {{ package.duration }}</p>
-            </div>
-        {% empty %}
-            <p>No travel packages available at the moment.</p>
-        {% endfor %}
-    </div>
-{% endblock %}
-{% endcomment %}
-<!-- paketa_turistike.html -->
-<!-- paketa_turistike.html -->
-​
-{% comment %}{% block content %}
-    <h1>Paketa Turistike</h1>
-    <p>Check out our exciting travel packages below:</p>
-​
-    <div class="package-container">
-        {% for trip in packages %}
-            <div class="package">
-                <h2>{{ trip.from_city }} to {{ trip.to_city }}</h2>
-                <p>Departure Date: {{ trip.departure_date }}</p>
-                <p>Return Date: {{ trip.return_date }}</p>
-                <p>Number of Adults: {{ trip.nr_adults }}</p>
-                <p>Number of Places for Children: {{ trip.places_for_children }}</p>
-            </div>
-        {% empty %}
-            <p>No travel packages available at the moment.</p>
-        {% endfor %}
-    </div>
-{% endblock %}{% endcomment %}
-​
-<!-- paketa_turistike.html -->
-​
-​
-{% block content %}
-​
-    {% comment %}<style>
-        /* Your custom CSS code here */
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Exciting Trips</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
         }
-​
-        /* Additional custom styles */
-    </style>{% endcomment %}
-    <div class="container">
-        <h1 class="mt-5">Paketa Turistike</h1>
-        <p>Check out our exciting travel packages below:</p>
-​
+        .card {
+            margin-bottom: 20px;
+        }
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-title {
+            color: #f47b2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Discover Our Exciting Trips</h1>
         <div class="row">
-            {% for trip in packages %}
-                <div class="col-md-6">
-                    <div class="card mb-4">
+            {% for trip in trips %}
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card">
+                        <img src="{{ trip.image_url }}" class="card-img-top" alt="Image of {{ trip.to_city }}">
                         <div class="card-body">
-                            <h2 class="card-title">{{ trip.from_city }} to {{ trip.to_city }}</h2>
-                            <p class="card-text">Departure Date: {{ trip.departure_date }}</p>
-                            <p class="card-text">Return Date: {{ trip.return_date }}</p>
-                            <p class="card-text">Number of Adults: {{ trip.nr_adults }}</p>
-                            <p class="card-text">Number of Places for Children: {{ trip.places_for_children }}</p>
+                            <h5 class="card-title">{{ trip.from_city }} to {{ trip.to_city }}</h5>
+                            <p class="card-text">
+                                Departure: {{ trip.departure_date }}<br>
+                                Return: {{ trip.return_date }}<br>
+                                Adults: {{ trip.nr_adults }}<br>
+                                Children: {{ trip.nr_children }}<br>
+                                <strong>Description:</strong> {{ trip.description }}
+                            </p>
+                            <a href="#" class="btn btn-primary">Book Now</a>
                         </div>
                     </div>
-                </div>
-            {% empty %}
-                <div class="col">
-                    <p>No travel packages available at the moment.</p>
                 </div>
             {% endfor %}
         </div>
     </div>
-    <link rel="stylesheet" type="text/css" href="../../static/CSS/paketa_turistike.css">
-{% endblock %}
-​
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
