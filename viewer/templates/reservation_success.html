@@ -1,14 +1,23 @@
-  <h1>Reservation Success</h1>
-  <p>Congratulations,  Tomas ! Your reservation has been successfully made.</p>
+{% extends "base.html" %}
+{% load static %}
 
-  <h2>Reservation Details:</h2>
-  <ul>
-    <li>From: {{ reservation.from_location.name }}</li>
-    <li>To: {{ reservation.to_location.name }}</li>
-    <li>Departure Date: {{ reservation.date_of_departure }}</li>
-    <li>Return Date: {{ reservation.return_date }}</li>
-    <li>Number of Adults: {{ reservation.number_of_adults }}</li>
-    <li>Number of Children: {{ reservation.number_of_children }}</li>
-  </ul>
+{% block content %}
 
-  <p>Thank you for choosing our service. We hope you have a pleasant journey!</p>
+    <h1>Reservation Success</h1>
+    <p>Congratulations, {{ reservation.user }} ! Your reservation has been successfully made.</p>
+
+    <h2>Reservation Details:</h2>
+    <ul>
+        <li>From: {{ reservation.from_location.name }} {{ reservation.from_airport.name }}</li>
+        <li>To: {{ reservation.to_location.name }} {{ reservation.to_airport.name }}</li>
+        <li>Hotel: {{ reservation.hotel.name }}</li>
+        <li>Hotel Price: {{ reservation.hotel_price}}</li>
+        <li>Departure Date: {{ reservation.date_of_departure }}</li>
+        <li>Return Date: {{ reservation.return_date }}</li>
+        <li>Number of Adults: {{ reservation.number_of_adults }}</li>
+        <li>Number of Children: {{ reservation.number_of_children }}</li>
+        <li>Airport Price: {{ reservation.airport_price }}$</li>
+    </ul>
+
+    <p>Thank you for choosing our service. We hope you have a pleasant journey!</p>
+{% endblock %}

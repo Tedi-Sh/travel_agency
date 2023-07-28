@@ -1,27 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Exciting Trips</title>
-    <style>
-        body {
-            background-color: #f0f0f0;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        .card img {
-            height: 200px;
-            object-fit: cover;
-        }
-        .card-title {
-            color: #f47b2a;
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
     <div class="container mt-5">
         <h1 class="text-center mb-4">Discover Our Exciting Trips</h1>
         <div class="row">
@@ -47,5 +27,5 @@
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}
+

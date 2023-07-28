@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db.models import IntegerField, CharField, ForeignKey, RESTRICT, TextField, Model, DO_NOTHING, DateField, \
-    DecimalField
+    DecimalField, FloatField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import date
 
@@ -33,7 +33,6 @@ class Discount(Model):
 class Hotel(Model):
     name = CharField(max_length=100)
     stars = IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
-
     descriptions = TextField(max_length=255)
     belong_to_city = ForeignKey(City, on_delete=RESTRICT)
     price = IntegerField(validators=[MinValueValidator(1)])
@@ -69,13 +68,18 @@ class Trip(Model):
 
 
 class Reservations(Model):
-    # user = ForeignKey(User, on_delete=DO_NOTHING)
-    from_location = ForeignKey(Airport, related_name='departure_airports', on_delete=DO_NOTHING)
-    to_location = ForeignKey(Airport, related_name='arrival_airports', on_delete=DO_NOTHING)
+    user = ForeignKey(User, on_delete=DO_NOTHING)
+    from_location = ForeignKey(City, related_name='departure_cities', on_delete=DO_NOTHING)
+    to_location = ForeignKey(City, related_name='arrival_cities', on_delete=DO_NOTHING)
+    from_airport = ForeignKey(Airport, related_name='departure_airports', on_delete=DO_NOTHING)
+    to_airport = ForeignKey(Airport, related_name='arrival_airports', on_delete=DO_NOTHING)
     date_of_departure = DateField()
     return_date = DateField()
     number_of_adults = IntegerField(validators=[MinValueValidator(1)])
     number_of_children = IntegerField(validators=[MinValueValidator(0)])
+    hotel = ForeignKey(Hotel, on_delete=DO_NOTHING)
+    hotel_price = FloatField(default=0)
+    airport_price = FloatField(default=0)
 
     def __str__(self):
         return f"Reservation by {self.from_location.name} to {self.to_location.name}"

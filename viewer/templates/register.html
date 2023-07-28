@@ -1,5 +1,5 @@
-<!-- register.html -->
 {% extends 'user.html' %}
+
 {% block content %}
     <h1>Register User</h1>
     <form method="post">
@@ -7,5 +7,5 @@
         {{ form.as_p }}
         <input type="submit" value="Register">
     </form>
-    <p>Already have an account? <a href="{% url 'home' %}">Log in</a> here.</p>
+    <p>Already have an account? <a href="{% url 'login' %}">Log in</a> here.</p>
 {% endblock %}
