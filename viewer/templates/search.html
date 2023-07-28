@@ -1,24 +1,47 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Search for Trips</title>
+
+{% block content %}
     <!-- Add Bootstrap CSS for styling -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
+
+    <style>
+        .form-inline > div {
+            flex: 0 0 auto;
+            width: auto;
+            padding: 0 1em;
+        }
+
+        .transparent-div {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+
+    <div class="container-fluid transparent-div">
         <h2>Search for Trips</h2>
-        <form method="post">
+        <form class="form-inline justify-content-between flex-wrap" method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Search</button>
+            <div>
+                {{ form.from_location.label_tag }} {{ form.from_location }}
+            </div>
+            <div>
+                {{ form.to_location.label_tag }} {{ form.to_location }}
+            </div>
+            <div>
+                {{ form.date_of_departure.label_tag }} {{ form.date_of_departure }}
+            </div>
+            <div>
+                {{ form.return_date.label_tag }} {{ form.return_date }}
+            </div>
+            <div>
+                {{ form.number_of_adults.label_tag }} {{ form.number_of_adults }}
+            </div>
+            <div>
+                {{ form.number_of_children.label_tag }} {{ form.number_of_children }}
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
         </form>
     </div>
-</body>
-</html>
-
-
-
-
-
+{% endblock %}

@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+
 {% block content %}
-    <h1>User</h1>
-    {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}!</p>
-        <a href="{% url 'log_out' %}">Log Out</a>
-    {% else %}
-        <form method="post">
-            {% csrf_token %}
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-            <input type="submit" value="Login">
-        </form>
-        <p>Don't have an account? <a href="{% url 'register_user' %}">Sign up</a> here.</p>
-    {% endif %}
+<h1>User</h1>
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}!</p>
+    <a href="{% url 'log_out' %}">Log Out</a>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <input type="submit" value="Login">
+    </form>
+    <p>Don't have an account? <a href="{% url 'register_user' %}">Sign up</a> here.</p>
+{% endif %}
 {% endblock %}
