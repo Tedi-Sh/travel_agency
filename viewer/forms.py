@@ -1,5 +1,6 @@
-from django.forms import DateField, Select, NumberInput, IntegerField, Form, SelectDateWidget, ChoiceField
-from viewer.models import Airport, City
+from django.forms import DateField, Select, NumberInput, IntegerField, Form, SelectDateWidget, ChoiceField, ModelForm, \
+    ModelChoiceField, DecimalField
+from viewer.models import Airport, City, Reservations, Hotel
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -120,3 +121,44 @@ class SearchForm(Form):
                         code='invalid'
                     ),
                 })
+
+
+class ReservationForm(SearchForm):
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.pop('instance', None)
+        super().__init__(*args, **kwargs)
+
+        if instance:
+            for field in self.fields:
+                if hasattr(instance, field):
+                    self.fields[field].initial = getattr(instance, field)
+
+            self.fields['hotel'].queryset = Hotel.objects.filter(belong_to_city=instance.to_location)
+            self.fields['hotel_price'].initial = instance.hotel.price
+            self.fields[
+                'airport_price'].initial = instance.to_location.airport_set.first().price  # assuming an airport exists
+
+        elif 'to_location' in self.data:
+            self.fields['hotel'].queryset = Hotel.objects.filter(belong_to_city_id=self.data.get('to_location'))
+
+    class Meta:
+        model = Reservations
+        fields = [
+            'from_location',
+            'to_location',
+            'date_of_departure',
+            'return_date',
+            'number_of_adults',
+            'number_of_children',
+            'hotel',
+            'hotel_price',
+            'airport_price',
+        ]
+
+    hotel = ModelChoiceField(
+        queryset=Hotel.objects.none(),  # initially empty
+        widget=Select(attrs={'class': 'form-control'}),
+        label='Hotel'
+    )
+    hotel_price = DecimalField(widget=NumberInput(attrs={'class': 'form-control'}), label='Hotel Price')
+    airport_price = DecimalField(widget=NumberInput(attrs={'class': 'form-control'}), label='Airport Price')
