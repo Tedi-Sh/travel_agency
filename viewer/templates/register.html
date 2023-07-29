@@ -3,7 +3,7 @@
 ​
 {% block head %}
     <!-- Link the CSS file directly in the register.html template -->
-    <link rel="stylesheet" href="{% static 'register.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/register.css' %}">
 {% endblock %}
 ​
 {% block content %}
@@ -16,7 +16,7 @@
                     {{ form.as_p }}
                     <input type="submit" value="Register" class="btn btn-primary">
                 </form>
-                <p>Already have an account? <a href="{% url 'register_user' %}" class="btn btn-secondary">Log in</a> here.</p>
+                <p>Already have an account? <a href="{% url 'login' %}" class="btn btn-secondary">Log in</a> here.</p>
             </div>
         </div>
     </div>
