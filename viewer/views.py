@@ -14,7 +14,6 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 
 
-
 def about_us(request):
     return render(request, 'about_us.html')
 
@@ -249,6 +248,7 @@ def delete_reservation(request, reservation_id):
         return redirect('reservations')
 
     return render(request, 'confirm_delete.html', {'reservation': reservation})
+
 
 def my_profile(request):
     user_name = request.user.username
