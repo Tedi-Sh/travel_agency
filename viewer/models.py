@@ -70,8 +70,10 @@ class Trip(Model):
 
 class Reservations(Model):
     # user = ForeignKey(User, on_delete=DO_NOTHING)
+
     from_location = ForeignKey(Airport, related_name='departure_airports', on_delete=DO_NOTHING)
     to_location = ForeignKey(Airport, related_name='arrival_airports', on_delete=DO_NOTHING)
+    hotel = ForeignKey(Hotel, on_delete=DO_NOTHING, null=True)
     date_of_departure = DateField()
     return_date = DateField()
     number_of_adults = IntegerField(validators=[MinValueValidator(1)])

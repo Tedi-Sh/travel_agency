@@ -1,9 +1,10 @@
 from django.forms import DateField, Select, NumberInput, IntegerField, Form, SelectDateWidget, ChoiceField
-from viewer.models import Airport
+from viewer.models import Airport, Reservations
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django import forms
 
 
 class SignUpForm(UserCreationForm):
@@ -85,6 +86,7 @@ class SearchForm(Form):
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         get_airports = Airport.objects.all()
+
         self.fields['from_location'] = ChoiceField(
             choices=[(airport.id, f'{airport.belong_to_city.name} - {airport.name}')
                      for airport in get_airports
@@ -120,3 +122,9 @@ class SearchForm(Form):
                         code='invalid'
                     ),
                 })
+
+
+    
+
+
+

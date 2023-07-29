@@ -3,12 +3,14 @@
 
   <h2>Reservation Details:</h2>
   <ul>
-    <li>From: {{ reservation.from_location.name }}</li>
-    <li>To: {{ reservation.to_location.name }}</li>
+    <li>From: {{ reservation.to_location }}</li>
+    <li>To: {{ reservation.from_location }}</li>
     <li>Departure Date: {{ reservation.date_of_departure }}</li>
     <li>Return Date: {{ reservation.return_date }}</li>
     <li>Number of Adults: {{ reservation.number_of_adults }}</li>
     <li>Number of Children: {{ reservation.number_of_children }}</li>
+
   </ul>
+
 
   <p>Thank you for choosing our service. We hope you have a pleasant journey!</p>
