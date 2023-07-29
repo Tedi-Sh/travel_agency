@@ -1,51 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Exciting Trips</title>
-    <style>
-        body {
-            background-color: #f0f0f0;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        .card img {
-            height: 200px;
-            object-fit: cover;
-        }
-        .card-title {
-            color: #f47b2a;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+​
+{% block head %}
+    <!-- Link the CSS file directly in the PaketaTuristike.html template -->
+    <link rel="stylesheet" href="{% static 'CSS/PaketaTuristike.css' %}">
+{% endblock %}
+​
+{% block content %}
     <div class="container mt-5">
         <h1 class="text-center mb-4">Discover Our Exciting Trips</h1>
         <div class="row">
             {% for trip in trips %}
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card">
-                        <img src="{{ trip.image_url }}" class="card-img-top" alt="Image of {{ trip.to_city }}">
+                    <div>
                         <div class="card-body">
                             <h5 class="card-title">{{ trip.from_city }} to {{ trip.to_city }}</h5>
                             <p class="card-text">
+                                <strong>Description:</strong> {{ trip.description }}
+                                <br>
                                 Departure: {{ trip.departure_date }}<br>
                                 Return: {{ trip.return_date }}<br>
                                 Adults: {{ trip.nr_adults }}<br>
                                 Children: {{ trip.nr_children }}<br>
-                                <strong>Description:</strong> {{ trip.description }}
                             </p>
-                            <a href="#" class="btn btn-primary">Book Now</a>
+                            <form action="{% url 'book_res' trip.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="trip" value="{{ trip.id }}" >
+                                <input type="submit" value="Reserve Now" class="btn btn-primary">
+                            </form>
+{#                            <a href="{% url 'book_res' trip.id %}" class="btn btn-primary">Book Now</a>#}
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-
+​
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}

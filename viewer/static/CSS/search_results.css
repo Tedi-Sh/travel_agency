@@ -1,0 +1,81 @@
+/* Center the container */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Style for the h1 tag */
+h1 {
+  font-size: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  font-weight: bold;
+  color: black;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Style for the card */
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Style for the card image */
+.card img {
+  width: 50%;
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+/* Style for the card title */
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Style for the card text */
+.card-text {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Style for the Reserve Now button */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the Reserve Now button */
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive layout for the cards */
+@media (max-width: 576px) {
+  .card {
+    flex-basis: 100%;
+  }
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px; /* Adjust the height as per your design preference */
+    object-fit: cover;
+    display: block;
+    margin: 0 auto; /* This centers the image horizontally */
+}

@@ -7,7 +7,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('viewer', '0009_alter_discount_discount_percentage'),
     ]
@@ -23,16 +22,5 @@ class Migration(migrations.Migration):
             name='return_date',
             field=models.DateField(default=datetime.date(2023, 7, 23)),
         ),
-        migrations.CreateModel(
-            name='Reservations',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_of_departure', models.DateField()),
-                ('return_date', models.DateField()),
-                ('number_of_adults', models.IntegerField(validators=[django.core.validators.MinValueValidator(1)])),
-                ('number_of_children', models.IntegerField(validators=[django.core.validators.MinValueValidator(0)])),
-                ('from_location', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='departure_airports', to='viewer.airport')),
-                ('to_location', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='arrival_airports', to='viewer.airport')),
-            ],
-        ),
+
     ]

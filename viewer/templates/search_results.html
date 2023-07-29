@@ -1,39 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div class="container mt-5">
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
         <h1 class="text-center mb-4">Search Results</h1>
+
         <div class="row">
             {% for hotel in hotels %}
-                <a href="{% url 'create_reservation' hotel.id %}"> {{ hotel.name }}</a>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card">
                         <img src="{{ hotel.image_url }}" class="card-img-top" alt="Image of {{ hotel.name }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ hotel.name }}</h5>
                             <p class="card-text">
-                                Stars: {{ hotel.star }}<br>
+                                Stars: {{ hotel.stars }}<br>
                                 Price: ${{ hotel.price }}<br>
-                                <strong>Description:</strong> {{ hotel.description }}
+                                <strong>Description:</strong> {{ hotel.descriptions }}
                             </p>
-                            <a href="{% url 'create_reservation' hotel.id %}"><button type="submit">Book</button> </a>
-{#                            <form action="" method="post">#}
-{#                                {% csrf_token %}#}
-{#                                <input type="hidden" name="hotel" value="{{ hotel.id }}">#}
-{#                                <input type="submit"   value="Reserve Now" class="btn btn-primary"></a>#}
-{#                                <a href="{% url 'create_reservation' hotel.id %}"><button type="submit">Book</button> </a>#}
-{#                            </form>#}
+                            <form action="{% url 'create_reservation' hotel.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="hotel" value="{{ hotel.id }}">
+                                <input type="submit" value="Reserve Now" class="btn btn-primary">
+                            </form>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-</body>
-</html>
+    <link rel="stylesheet" href="{% static 'CSS/search_results.css' %}">
+    <script>
+        // JavaScript to set random image URLs for each hotel card
+        document.addEventListener("DOMContentLoaded", function () {
+            const hotelCards = document.querySelectorAll(".card");
+            const imageUrls = [
+                "{% static 'images/image1.jpg' %}",
+                "{% static 'images/image2.jpeg' %}",
+                "{% static 'images/image3.jpg' %}",
+                "{% static 'images/image4.jpg' %}",
+                "{% static 'images/image5.jpg' %}",
+                "{% static 'images/image6.jpeg' %}",
+                "{% static 'images/image7.jpeg' %}",
+                "{% static 'images/image8.jpg' %}",
+            ];
+
+            hotelCards.forEach((card) => {
+                const randomImageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+                const imgElement = card.querySelector(".card-img-top");
+                imgElement.src = randomImageUrl;
+            });
+        });
+    </script>
+{% endblock %}
+
