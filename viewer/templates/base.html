@@ -18,6 +18,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
             integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'CSS/search_bar.css' %}">
 </head>
 
 
@@ -28,16 +29,17 @@
         background-size: cover;
         background-attachment: fixed;
     }
+
 </style>
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="{% url 'search' %}">Travel Agency</a>
+    <a class="navbar-brand" href="{% url 'search' %}" style="margin-left: 30px">Travel Agency</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse justify-content-end" style="margin-right: 30px" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="{% url 'trips_view' %}">
                 Paketa Turistike
@@ -59,5 +61,4 @@
     </div>
 </div>
 </body>
-<link rel="stylesheet" href="{% static 'CSS/search_bar.css' %}">
 </html>

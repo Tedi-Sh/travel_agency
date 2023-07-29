@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: black;
 }
 
 .container {
@@ -8,11 +8,11 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-    margin: 20px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    margin: 40px;
 }
+
 
 .content {
     padding: 20px;
@@ -25,7 +25,8 @@ h1 {
 }
 
 h2 {
-    color: #ff9900;
+    color: black;
+    font-weight: bold;
     margin-top: 15px;
 }
 
