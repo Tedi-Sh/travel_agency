@@ -4,7 +4,6 @@ from django.db.models import IntegerField, CharField, ForeignKey, RESTRICT, Text
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import date
 
-
 class Country(Model):
     name = CharField(max_length=50)
 
@@ -59,7 +58,6 @@ class Trip(Model):
     to_airport = ForeignKey(Airport, related_name='arrival_trips', on_delete=DO_NOTHING)
     departure_date = DateField(auto_created=False, default=date.today())
     return_date = DateField(auto_created=False, default=date.today())
-
     nr_adults = IntegerField(default=1)
     places_for_children = IntegerField(default=0)
 

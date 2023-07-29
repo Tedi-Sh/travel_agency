@@ -1,9 +1,11 @@
 from datetime import datetime
+
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from viewer.forms import SignUpForm, SearchForm
+from viewer.forms import SignUpForm, SearchForm, ReservationForm
 from viewer.models import Hotel, Airport, Trip, City, Country
 from django.contrib.auth.decorators import login_required
 from .models import Reservations
@@ -196,3 +198,52 @@ def create_reservation(request, hotel_id):
     )
     del request.session['reservation_details']
     return render(request, 'reservation_success.html', {'reservation': reservation})
+
+
+def reservations_view(request):
+    reservations = Reservations.objects.filter(user=request.user)
+
+    return render(request, 'reservations.html', {'reservations': reservations})
+
+
+@login_required
+def modify_reservation(request, reservation_id):
+    # Fetch the reservation or return a 404 error if it doesn't exist
+    reservation = get_object_or_404(Reservations, id=reservation_id)
+
+    # Ensure the user is authorized to modify the reservation
+    if request.user != reservation.user:
+        messages.error(request, 'You are not authorized to modify this reservation.')
+        return redirect('reservations')
+
+    if request.method == 'POST':
+        # If the form has been submitted, update the reservation with the form data
+        form = ReservationForm(request.POST, instance=reservation)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your reservation has been updated.')
+            return redirect('reservations')
+    else:
+        # If the request is a GET, display the form with the current reservation data
+        form = ReservationForm(instance=reservation)
+
+    return render(request, 'modify_reservation.html', {'form': form})
+
+
+@login_required
+def delete_reservation(request, reservation_id):
+    # Fetch the reservation or return a 404 error if it doesn't exist
+    reservation = get_object_or_404(Reservations, id=reservation_id)
+
+    # Ensure the user is authorized to delete the reservation
+    if request.user != reservation.user:
+        messages.error(request, 'You are not authorized to delete this reservation.')
+        return redirect('reservations')
+
+    if request.method == 'POST':
+        # Delete the reservation
+        reservation.delete()
+        messages.success(request, 'Your reservation has been deleted.')
+        return redirect('reservations')
+
+    return render(request, 'confirm_delete.html', {'reservation': reservation})
