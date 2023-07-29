@@ -11,6 +11,10 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login as auth_login
 
 
+def about_us(request):
+    return render(request, 'about_us.html')
+
+
 def trips_view(request):
     trips = Trip.objects.all()[:8]
     return render(request, 'PaketaTuristike.html', {'trips': trips})
@@ -133,7 +137,6 @@ def register_user(request):
 #
 #     return render(request, 'reservation_success.html', {'reservation': reservation})
 
-@login_required
 def search(request):
     if request.method == "POST":
         form = SearchForm(request.POST)
@@ -165,10 +168,11 @@ def search(request):
     return render(request, 'search.html', {'form': form})
 
 
+@login_required
 def create_reservation(request, hotel_id):
     details = request.session.get('reservation_details')
-    if not details:
-        return render(request, 'search.html')
+    # if not details:
+    #     return render(request, 'search.html')
     hotel = get_object_or_404(Hotel, pk=hotel_id)
     from_location = get_object_or_404(City, pk=details['from_location'])
     to_location = get_object_or_404(City, pk=details['to_location'])

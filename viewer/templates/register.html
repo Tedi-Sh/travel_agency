@@ -1,11 +1,23 @@
 {% extends 'user.html' %}
-
+{% load static %}
+​
+{% block head %}
+    <!-- Link the CSS file directly in the register.html template -->
+    <link rel="stylesheet" href="{% static 'register.css' %}">
+{% endblock %}
+​
 {% block content %}
-    <h1>Register User</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Register">
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Log in</a> here.</p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1>Register User</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Register" class="btn btn-primary">
+                </form>
+                <p>Already have an account? <a href="{% url 'register_user' %}" class="btn btn-secondary">Log in</a> here.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
