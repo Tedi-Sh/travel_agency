@@ -29,5 +29,28 @@
         </div>
     </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'CSS/search_results.css' %}">
+    <script>
+        // JavaScript to set random image URLs for each hotel card
+        document.addEventListener("DOMContentLoaded", function () {
+            const hotelCards = document.querySelectorAll(".card");
+            const imageUrls = [
+                "{% static 'images/image1.jpg' %}",
+                "{% static 'images/image2.jpeg' %}",
+                "{% static 'images/image3.jpg' %}",
+                "{% static 'images/image4.jpg' %}",
+                "{% static 'images/image5.jpg' %}",
+                "{% static 'images/image6.jpeg' %}",
+                "{% static 'images/image7.jpeg' %}",
+                "{% static 'images/image8.jpg' %}",
+            ];
+
+            hotelCards.forEach((card) => {
+                const randomImageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+                const imgElement = card.querySelector(".card-img-top");
+                imgElement.src = randomImageUrl;
+            });
+        });
+    </script>
 {% endblock %}
+
