@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+​
+{% block head %}
+    <!-- Link the CSS file directly in the PaketaTuristike.html template -->
+    <link rel="stylesheet" href="{% static 'PaketaTuristike.css' %}">
+{% endblock %}
+​
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Discover Our Exciting Trips</h1>
+        <div class="row">
+            {% for trip in trips %}
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ trip.from_city }} to {{ trip.to_city }}</h5>
+                            <p class="card-text">
+                                <strong>Description:</strong> {{ trip.description }}
+                                <br>
+                                Departure: {{ trip.departure_date }}<br>
+                                Return: {{ trip.return_date }}<br>
+                                Adults: {{ trip.nr_adults }}<br>
+                                Children: {{ trip.nr_children }}<br>
+                            </p>
+                            <a href="#" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+​
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

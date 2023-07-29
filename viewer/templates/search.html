@@ -1,43 +1,40 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-
-    <div class="container form-container">
-        <h2>Destinations</h2>
-        <form method="GET" action="/search" class="form-row">
-            <label for="from_city">From: </label>
-            <select id="from_city" name="from_city">
-                {% for city in cities %}
-                    <option value="{{ city.id }}">{{ city.name }}</option>
-                {% endfor %}
-            </select>
-
-            <label for="to_city">To :</label>
-            <select id="to_city" name="to_city">
-                {% for city in cities %}
-                    <option value="{{ city.id }}">{{ city.name }}</option>
-                {% endfor %}
-            </select>
-
-            <label for="departure_date">Departure:</label>
-            <input type="date" id="departure_date" name="departure_date">
-
-            <label for="return_date">Return:</label>
-            <input type="date" id="return_date" name="return_date">
-
-            <label for="guests">Guests:</label>
-            <select id="guests" name="guests">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-
-
-            <button type="submit">Search</button>
+    </style>
+    <div class="container-fluid">
+        <h2 class="text-center">Search for Trips</h2>
+        <form class="d-flex justify-content-center flex-wrap" method="post" action="{% url 'search' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.from_location.id_for_label }}">From: </label>
+                {{ form.from_location }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.to_location.id_for_label }}">To:</label>
+                {{ form.to_location }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.number_of_adults.id_for_label }}">Nr. of Adults:</label>
+                {{ form.number_of_adults }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.number_of_children.id_for_label }}">Nr. of Children:</label>
+                {{ form.number_of_children }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.date_of_departure.id_for_label }}">Departure:</label>
+                <input type="date" name="{{ form.date_of_departure.name }}"
+                       id="{{ form.date_of_departure.id_for_label }}" value="{{ form.date_of_departure.value }}">
+            </div>
+            <div class="form-group">
+                <label for="{{ form.return_date.id_for_label }}">Return:</label>
+                <input type="date" name="{{ form.return_date.name }}" id="{{ form.return_date.id_for_label }}"
+                       value="{{ form.return_date.value }}">
+            </div>
+            <div class="button-container">
+                <button type="submit">Search</button>
+            </div>
         </form>
     </div>
-    <link rel="stylesheet" type="text/css" href="../../static/CSS/search_bar.css">
 {% endblock %}

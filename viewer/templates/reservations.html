@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+ {% block content %}
+
+{% block head%}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/reservations.css' %}">
+ {% endblock %}
+<body>
+        <title>Reservation Success</title>
+    <p>Congratulations, {{ reservation.user }}! Your reservation has been successfully made.</p>
+    <h2>Reservation Details:</h2>
+    <ul>
+        <li>From: {{ reservation.from_location.name }} {{ reservation.from_airport.name }}</li>
+        <li>To: {{ reservation.to_location.name }} {{ reservation.to_airport.name }}</li>
+        <li>Hotel: {{ reservation.hotel.name }}</li>
+        <li>Hotel Price: {{ reservation.hotel_price }}</li>
+        <li>Departure Date: {{ reservation.date_of_departure }}</li>
+        <li>Return Date: {{ reservation.return_date }}</li>
+        <li>Number of Adults: {{ reservation.number_of_adults }}</li>
+        <li>Number of Children: {{ reservation.number_of_children }}</li>
+        <li>Airport Price: {{ reservation.airport_price }}$</li>
+    </ul>
+    <p>Thank you for choosing our service. We hope you have a pleasant journey!</p>
+ {% endblock %}
+</body>
+</html>

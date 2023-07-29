@@ -1,5 +1,5 @@
 from django.forms import DateField, Select, NumberInput, IntegerField, Form, SelectDateWidget, ChoiceField
-from viewer.models import Airport
+from viewer.models import City
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -81,26 +81,20 @@ class SignUpForm(UserCreationForm):
 
 
 class SearchForm(Form):
-    TRIP_TYPES = [
-        ('BB', 'Bed & Breakfast'),
-        ('HB', 'Half Board'),
-        ('FB', 'Full Board'),
-        ('AI', 'All Inclusive')
-    ]
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
-        get_airports = Airport.objects.all()
+        get_city = City.objects.all()
         self.fields['from_location'] = ChoiceField(
-            choices=[(airport.id, f'{airport.belong_to_city.name} - {airport.name}')
-                     for airport in get_airports
+            choices=[(city.id, f'{city.name} - {", ".join([airport.name for airport in city.airport_set.all()])}')
+                     for city in get_city
                      ],
             widget=Select(attrs={'class': 'form-control'}),
             label='From'
         )
         self.fields['to_location'] = ChoiceField(
-            choices=[(airport.id, f'{airport.belong_to_city.name} - {airport.name}')
-                     for airport in get_airports
+            choices=[(city.id, f'{city.name} - {", ".join([airport.name for airport in city.airport_set.all()])}')
+                     for city in get_city
                      ],
             widget=Select(attrs={'class': 'form-control'}),
             label='To'
@@ -112,7 +106,6 @@ class SearchForm(Form):
                                     label='Nr. of Adults', initial=1)
     number_of_children = IntegerField(min_value=0, widget=NumberInput(attrs={'class': 'form-control'}),
                                       label='Nr. of Children', initial=0)
-    trip_type = ChoiceField(choices=TRIP_TYPES, widget=Select(attrs={'class': 'form-control'}))
 
     def clean(self):
         cleaned_data = super().clean()
