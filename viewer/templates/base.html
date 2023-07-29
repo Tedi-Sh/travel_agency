@@ -47,8 +47,15 @@
             <a class="nav-item nav-link active" href="{% url 'aboutus' %}">
                 About Us
             </a>
+            <a class="nav-item nav-link active" href="{% url 'reservations' %}">
+                My reservations
+            </a>
             <a class="nav-item nav-link active" href="{% url 'login' %}">
-                User
+                {% if user.is_authenticated %}
+                    {{ user.username|capfirst }}
+                {% else %}
+                    User
+                {% endif %}
             </a>
         </div>
     </div>

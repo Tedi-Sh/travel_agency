@@ -1,30 +1,36 @@
 {% extends 'base.html' %}
-{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
- {% block content %}
+{% block content %}
+    {% load static %}
+    <h1 class="mb-4">My Reservations</h1>
+    <link rel="stylesheet" href="{% static 'CSS/search_results.css' %}">
 
-{% block head%}
-    <meta charset="UTF-8">
-    <title>{% block title %} Reservation Success {% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'CSS/reservations.css' %}">
- {% endblock %}
-<body>
-    <p>Congratulations, {{ reservation.user }}! Your reservation has been successfully made.</p>
-    <h2>Reservation Details:</h2>
-    <ul>
-        <li>From: {{ reservation.from_location.name }} {{ reservation.from_airport.name }}</li>
-        <li>To: {{ reservation.to_location.name }} {{ reservation.to_airport.name }}</li>
-        <li>Hotel: {{ reservation.hotel.name }}</li>
-        <li>Hotel Price: {{ reservation.hotel_price }}</li>
-        <li>Departure Date: {{ reservation.date_of_departure }}</li>
-        <li>Return Date: {{ reservation.return_date }}</li>
-        <li>Number of Adults: {{ reservation.number_of_adults }}</li>
-        <li>Number of Children: {{ reservation.number_of_children }}</li>
-        <li>Airport Price: {{ reservation.airport_price }}$</li>
-    </ul>
-    <p>Thank you for choosing our service. We hope you have a pleasant journey!</p>
- {% endblock %}
-</body>
-</html>
+    <table class="table table-striped">
+
+        <thead>
+        <tr>
+            <th scope="col">From Location</th>
+            <th scope="col">To Location</th>
+            <th scope="col">Departure Date</th>
+            <th scope="col">Return Date</th>
+            <th scope="col">Hotel</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.from_location }}</td>
+                <td>{{ reservation.to_location }}</td>
+                <td>{{ reservation.date_of_departure }}</td>
+                <td>{{ reservation.return_date }}</td>
+                <td>{{ reservation.hotel }}</td>
+                <td>
+                    <a href="{% url 'modify_reservation' reservation.id %}" class="btn btn-warning">Modify</a>
+                    <a href="{% url 'delete_reservation' reservation.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
