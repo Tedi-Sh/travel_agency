@@ -2,20 +2,20 @@ body {
   background-color: #8a2be2; /* Violet color code */
   color: #ffffff; /* Text color */
 }
-​
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
-​
+
 /* Set the background color of the container and add some padding */
 .container {
     background-color: #f9f9f9;
     padding: 20px;
 }
-​
+
 /* Style the heading */
 h1 {
     font-size: 2rem;
@@ -23,7 +23,7 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
 }
-​
+
 /*!* Style the card body with some spacing and font size *!
 .card-body {
     padding: 15px;

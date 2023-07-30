@@ -1,22 +1,24 @@
 {% extends 'base.html' %}
-
 {% load static %}
-  <title>About Us</title>
-  <style>
-    .content-box {
-      border: 2px solid #333;
-      padding: 20px;
-      width: 400px;
-      margin: 50px auto;
-      text-align: center;
-      font-family: Arial, sans-serif;
-    }
-  </style>
-</head>
-<body>
-  <div class="content-box">
-    <h1>About Us</h1>
-    <p>This project has been created by Tedi Shehu, Tomas Arapi, Evelina Xhaja, and Glorja Dushku.</p>
-  </div>
-</body>
-</html>
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'CSS/search_results.css' %}">
+    <title>About Us</title>
+    <style>
+        .content-box {
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            width: 400px;
+            margin: 50px auto;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+
+    <div class="content-box">
+        <h1>About Us</h1>
+        <p>This project has been created by Tedi Shehu, Tomas Arapi, Evelina Xhaja, and Glorja Dushku.</p>
+    </div>
+{% endblock %}
