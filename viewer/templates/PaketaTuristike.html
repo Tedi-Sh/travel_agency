@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-​
 {% block head %}
     <!-- Link the CSS file directly in the PaketaTuristike.html template -->
     <link rel="stylesheet" href="{% static 'CSS/PaketaTuristike.css' %}">
 {% endblock %}
-​
 {% block content %}
     <div class="container mt-5">
         <h1 class="text-center mb-4">Discover Our Exciting Trips</h1>
@@ -23,13 +21,21 @@
                                 Adults: {{ trip.nr_adults }}<br>
                                 Children: {{ trip.nr_children }}<br>
                             </p>
-                            <a href="#" class="btn btn-primary">Book Now</a>
+                            <form action="{% url 'book_res' trip.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="trip" value="{{ trip.id }}" >
+                                <input type="submit" value="Reserve Now" class="btn btn-primary">
+                            </form>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-​
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
+
+
+
+
+

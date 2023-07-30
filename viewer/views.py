@@ -1,16 +1,23 @@
 from datetime import datetime
-
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
+from django.views.generic import UpdateView
 from viewer.forms import SignUpForm, SearchForm, ReservationForm
-from viewer.models import Hotel, Airport, Trip, City, Country
-from django.contrib.auth.decorators import login_required
+from viewer.models import Hotel, Airport, Trip, City
 from .models import Reservations
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+def my_profile(request):
+    user_name = request.user.username
+    return render(request, 'user.html', {'user_name': user_name})
 
 
 def about_us(request):
@@ -38,7 +45,6 @@ def login(request):
 
 def log_out(request):
     logout(request)
-    # message.reques("You have logged out")
     return redirect('search')
 
 
@@ -51,7 +57,6 @@ def register_user(request):
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             auth_login(request, user)
-            # messages.request("Record created)
             return redirect('search')
     else:
         form = SignUpForm()
@@ -59,85 +64,53 @@ def register_user(request):
     return render(request, 'register.html', {'form': form})
 
 
-# def search(request):
-#     if request.method == "POST":
-#         form = SearchForm(request.POST)
-#         if form.is_valid():
-#             to_location = form.cleaned_data.get('to_location')
-#             destination_airport = Airport.objects.get(pk=to_location)
-#             hotels = Hotel.objects.filter(belong_to_city=destination_airport.belong_to_city)
-#             return render(request, 'search_results.html', {
-#                 'hotels': hotels
-#             })
-#     else:
-#         form = SearchForm()
-#
-#     return render(request, 'search.html', {'form': form})
-#
-#
-# @login_required
-# def search_view(request):
-#     if request.method == "POST":
-#         form = SearchForm(request.POST)
-#         if form.is_valid():
-#             from_location = form.cleaned_data.get('from_location')
-#             to_location = form.cleaned_data.get('to_location')
-#             date_of_departure = form.cleaned_data.get('date_of_departure')
-#             return_date = form.cleaned_data.get('return_date')
-#             number_of_adults = form.cleaned_data.get('number_of_adults')
-#             number_of_children = form.cleaned_data.get('number_of_children')
-#
-#             try:
-#                 from_airport = Airport.objects.get(pk=from_location)
-#                 to_airport = Airport.objects.get(pk=to_location)
-#
-#                 # Store these details in the session
-#                 request.session['reservation_details'] = {
-#                     'from_location': from_airport.id,
-#                     'to_location': to_airport.id,
-#                     'date_of_departure': date_of_departure.isoformat(),
-#                     'return_date': return_date.isoformat(),
-#                     'number_of_adults': number_of_adults,
-#                     'number_of_children': number_of_children
-#                 }
-#
-#                 # Redirect to the results page
-#                 return HttpResponseRedirect('/search_results/')
-#             except Airport.DoesNotExist:
-#                 form.add_error(None, 'Invalid airport selected')
-#     else:
-#         form = SearchForm()
-#
-#     return render(request, 'search.html', {'form': form})
-#
-#
-# @login_required
-# def create_reservation_view(request, hotel_id):
-#     # Retrieve the reservation details from the session
-#     details = request.session.get('reservation_details')
-#
-#     if not details:
-#         return HttpResponseRedirect(reverse('search'))  # Use 'reverse' to avoid hard-coding URLs
-#
-#     hotel = get_object_or_404(Hotel, pk=hotel_id)  # Use 'get_object_or_404' to simplify error handling
-#     from_location = get_object_or_404(Airport, pk=details['from_location'])
-#     to_location = get_object_or_404(Airport, pk=details['to_location'])
-#
-#     reservation = Reservations.objects.create(
-#         user=request.user,
-#         from_location=from_location,
-#         to_location=to_location,
-#         date_of_departure=datetime.fromisoformat(details['date_of_departure']),
-#         return_date=datetime.fromisoformat(details['return_date']),
-#         number_of_adults=details['number_of_adults'],
-#         number_of_children=details['number_of_children'],
-#         hotel=hotel
-#     )
-#
-#     # Clear the reservation details from the session
-#     del request.session['reservation_details']
-#
-#     return render(request, 'reservation_success.html', {'reservation': reservation})
+def fetch_city_data(request, city_id):
+    city = get_object_or_404(City, id=city_id)
+    hotels = Hotel.objects.filter(belong_to_city=city)
+
+    airport = Airport.objects.filter(belong_to_city=city).first()
+
+    data = {
+        'hotels': [{'id': hotel.id, 'name': hotel.name, 'price': hotel.price} for hotel in hotels],
+        'airport_price': airport.price if airport else None,
+    }
+
+    return JsonResponse(data)
+
+
+@login_required
+def book_trip(request, trip_id):
+    try:
+        trip = get_object_or_404(Trip, pk=trip_id)
+        user = request.user
+        to_city = trip.to_city.id
+        to_airport = trip.to_airport.id
+        from_city = trip.from_city.id
+        from_airport = trip.from_airport.id
+        airport_price = trip.to_airport.price
+        return_date = trip.return_date
+        departure_date = trip.departure_date
+        hotel = Hotel.objects.filter(belong_to_city=to_airport).first()
+        number_of_children = trip.places_for_children
+        number_of_adults = trip.nr_adults
+        hotel_price = hotel.price
+        reservation = Reservations.objects.create(date_of_departure=departure_date,
+                                                  return_date=return_date,
+                                                  number_of_adults=number_of_adults,
+                                                  number_of_children=number_of_children,
+                                                  from_location_id=from_city,
+                                                  hotel_id=hotel.id,
+                                                  to_location_id=to_city,
+                                                  user_id=user.id,
+                                                  from_airport_id=from_airport,
+                                                  to_airport_id=to_airport,
+                                                  airport_price=airport_price,
+                                                  hotel_price=hotel_price,
+                                                  )
+        return render(request, "reservation_success.html", {"reservation": reservation})
+    except Exception as e:
+        return render(request, "error.html", {"error": str(e)})
+
 
 def search(request):
     if request.method == "POST":
@@ -149,14 +122,9 @@ def search(request):
             return_date = form.cleaned_data.get('return_date')
             number_of_adults = form.cleaned_data.get('number_of_adults')
             number_of_children = form.cleaned_data.get('number_of_children')
-            # from_airport = form.cleaned_data.get('from_airport')
-            # to_airport = form.cleaned_data.get('to_airport')
             destination_airport = Airport.objects.get(pk=to_location)
             hotel = Hotel.objects.filter(belong_to_city=destination_airport.belong_to_city)
-            # Store these details in the session
             request.session['reservation_details'] = {
-                # 'from_airport': from_airport,
-                # 'to_airport': to_airport,
                 'date_of_departure': date_of_departure.isoformat(),
                 'return_date': return_date.isoformat(),
                 'number_of_adults': number_of_adults,
@@ -173,8 +141,8 @@ def search(request):
 @login_required
 def create_reservation(request, hotel_id):
     details = request.session.get('reservation_details')
-    # if not details:
-    #     return render(request, 'search.html')
+    if not details:
+        return render(request, 'search.html')
     hotel = get_object_or_404(Hotel, pk=hotel_id)
     from_location = get_object_or_404(City, pk=details['from_location'])
     to_location = get_object_or_404(City, pk=details['to_location'])
@@ -206,42 +174,33 @@ def reservations_view(request):
     return render(request, 'reservations.html', {'reservations': reservations})
 
 
-@login_required
-def modify_reservation(request, reservation_id):
-    # Fetch the reservation or return a 404 error if it doesn't exist
-    reservation = get_object_or_404(Reservations, id=reservation_id)
+class ReservationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Reservations
+    form_class = ReservationForm
+    template_name = 'modify_reservation.html'
+    success_url = '/reservations'
 
-    # Ensure the user is authorized to modify the reservation
-    if request.user != reservation.user:
-        messages.error(request, 'You are not authorized to modify this reservation.')
-        return redirect('reservations')
+    def test_func(self):
+        reservation = self.get_object()
+        return self.request.user == reservation.user
 
-    if request.method == 'POST':
-        # If the form has been submitted, update the reservation with the form data
-        form = ReservationForm(request.POST, instance=reservation)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your reservation has been updated.')
-            return redirect('reservations')
-    else:
-        # If the request is a GET, display the form with the current reservation data
-        form = ReservationForm(instance=reservation)
 
-    return render(request, 'modify_reservation.html', {'form': form})
+@csrf_exempt
+def update_reservation(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        return JsonResponse({"message": "Success!"})
 
 
 @login_required
 def delete_reservation(request, reservation_id):
-    # Fetch the reservation or return a 404 error if it doesn't exist
     reservation = get_object_or_404(Reservations, id=reservation_id)
 
-    # Ensure the user is authorized to delete the reservation
     if request.user != reservation.user:
         messages.error(request, 'You are not authorized to delete this reservation.')
         return redirect('reservations')
 
     if request.method == 'POST':
-        # Delete the reservation
         reservation.delete()
         messages.success(request, 'Your reservation has been deleted.')
         return redirect('reservations')

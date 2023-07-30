@@ -4,6 +4,7 @@ from django.db.models import IntegerField, CharField, ForeignKey, RESTRICT, Text
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import date
 
+
 class Country(Model):
     name = CharField(max_length=50)
 
@@ -81,4 +82,3 @@ class Reservations(Model):
 
     def __str__(self):
         return f"Reservation by {self.from_location.name} to {self.to_location.name}"
-

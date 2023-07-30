@@ -1,58 +1,76 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Modify Reservation</h1>
+    <h1 class="mb-4">Modify Reservation</h1>
 
-<form method="POST">
-  {% csrf_token %}
+    <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
 
-  <div class="form-group">
-    {{ form.from_location.label_tag }}
-    {{ form.from_location }}
-  </div>
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="invalid-feedback" style="display: block;">
+                        {{ field.errors|join:", " }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
 
-  <div class="form-group">
-    {{ form.to_location.label_tag }}
-    {{ form.to_location }}
-  </div>
+        <button type="submit" class="btn btn-success mb-3">Update Reservation</button>
+    </form>
 
-  <div class="form-group">
-    {{ form.date_of_departure.label_tag }}
-    {{ form.date_of_departure }}
-  </div>
+    <a href="{% url 'reservations' %}" class="btn btn-danger">Cancel</a>
 
-  <div class="form-group">
-    {{ form.return_date.label_tag }}
-    {{ form.return_date }}
-  </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var hotelsData = [];
 
-  <div class="form-group">
-    {{ form.number_of_adults.label_tag }}
-    {{ form.number_of_adults }}
-  </div>
+            function updateCityData(cityId) {
+                var hotelSelect = $('#id_hotel');
+                var hotelPriceInput = $('#id_hotel_price');
+                var airportPriceInput = $('#id_airport_price');
 
-  <div class="form-group">
-    {{ form.number_of_children.label_tag }}
-    {{ form.number_of_children }}
-  </div>
+                hotelSelect.empty();
+                hotelPriceInput.val('');
+                airportPriceInput.val('');
 
-  <div class="form-group">
-    {{ form.hotel.label_tag }}
-    {{ form.hotel }}
-  </div>
+                if (cityId) {
+                    $.ajax({
+                        url: "{% url 'fetch_city_data' city_id=123 %}".replace('123', cityId),
+                        success: function (data) {
+                            data.hotels.forEach(function (hotel) {
+                                hotelSelect.append(new Option(hotel.name, hotel.id));
+                            });
 
-  <div class="form-group">
-    {{ form.hotel_price.label_tag }}
-    {{ form.hotel_price }}
-  </div>
+                            hotelPriceInput.val(data.hotels[0]?.price || '');
+                            airportPriceInput.val(data.airport_price || '');
 
-  <div class="form-group">
-    {{ form.airport_price.label_tag }}
-    {{ form.airport_price }}
-  </div>
+                            hotelsData = data.hotels;
+                        }
+                    });
+                }
+            }
 
-  <button type="submit" class="btn btn-success">Update Reservation</button>
-</form>
+            // Update the data for the initially selected city
+            updateCityData($('#id_to_location').val());
 
-<a href="{% url 'reservations' %}" class="btn btn-danger">Cancel</a>
+            $('#id_to_location').change(function () {
+                updateCityData($(this).val());
+            });
+
+            $('#id_hotel').change(function () {
+                const selectedHotelId = $(this).val();
+
+                if (selectedHotelId) {
+                    const selectedHotel = hotelsData.find(hotel => hotel.id == selectedHotelId);
+                    if (selectedHotel) {
+                        $('#id_hotel_price').val(selectedHotel.price);
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
