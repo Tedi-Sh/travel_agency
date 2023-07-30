@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1 class="mb-4">Modify Reservation</h1>
+    <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="invalid-feedback" style="display: block;">
+                        {{ field.errors|join:", " }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success mb-3">Update Reservation</button>
+    </form>
+    <a href="{% url 'reservations' %}" class="btn btn-danger">Cancel</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var hotelsData = [];
+            function updateCityData(cityId) {
+                var hotelSelect = $('#id_hotel');
+                var hotelPriceInput = $('#id_hotel_price');
+                var airportPriceInput = $('#id_airport_price');
+                hotelSelect.empty();
+                hotelPriceInput.val('');
+                airportPriceInput.val('');
+                if (cityId) {
+                    $.ajax({
+                        url: "{% url 'fetch_city_data' city_id=123 %}".replace('123', cityId),
+                        success: function (data) {
+                            data.hotels.forEach(function (hotel) {
+                                hotelSelect.append(new Option(hotel.name, hotel.id));
+                            });
+                            hotelPriceInput.val(data.hotels[0]?.price || '');
+                            airportPriceInput.val(data.airport_price || '');
+                            hotelsData = data.hotels;
+                        }
+                    });
+                }
+            }
+            // Update the data for the initially selected city
+            updateCityData($('#id_to_location').val());
+            $('#id_to_location').change(function () {
+                updateCityData($(this).val());
+            });
+            $('#id_hotel').change(function () {
+                const selectedHotelId = $(this).val();
+                if (selectedHotelId) {
+                    const selectedHotel = hotelsData.find(hotel => hotel.id == selectedHotelId);
+                    if (selectedHotel) {
+                        $('#id_hotel_price').val(selectedHotel.price);
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

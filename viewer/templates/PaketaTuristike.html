@@ -1,18 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
-​
-{% block head %}
-    <!-- Link the CSS file directly in the PaketaTuristike.html template -->
-    <link rel="stylesheet" href="{% static 'CSS/PaketaTuristike.css' %}">
-{% endblock %}
-​
 {% block content %}
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Discover Our Exciting Trips</h1>
+        <h3 class="text-center mb-4">Discover Our Trips</h3>
         <div class="row">
             {% for trip in trips %}
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div>
+                    <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ trip.from_city }} to {{ trip.to_city }}</h5>
                             <p class="card-text">
@@ -24,17 +18,35 @@
                                 Children: {{ trip.nr_children }}<br>
                             </p>
                             <form action="{% url 'book_res' trip.id %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="trip" value="{{ trip.id }}" >
-                                <input type="submit" value="Reserve Now" class="btn btn-primary">
+    {% csrf_token %}
+    <input type="hidden" name="trip" value="{{ trip.id }}" >
+    <input type="submit" value="Reserve Now" class="btn btn-primary">
                             </form>
-{#                            <a href="{% url 'book_res' trip.id %}" class="btn btn-primary">Book Now</a>#}
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-​
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tripCards = document.querySelectorAll(".card");
+        tripCards.forEach((card, index) => {
+            const bookNowButton = card.querySelector(".book-now");
+            const bookingInfo = card.querySelector(".booking-info");
+            bookNowButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                const tripTitle = card.querySelector(".card-title").textContent;
+                const tripDescription = card.querySelector(".card-text").textContent;
+                bookingInfo.textContent = `You have booked the trip: ${tripTitle}. Here are the details of your booking: ${tripDescription}`;
+            });
+        });
+    });
+</script>
+{% endblock %}
+{% block head %}
+    <!-- Load CSS specific to paketaturistike in head -->
+    <link rel="stylesheet" href="{% static 'CSS/search_results.css' %}">
+    <!-- Include Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}

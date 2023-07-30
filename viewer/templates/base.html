@@ -1,12 +1,10 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}"{% endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Travel</title>
-    <link rel="stylesheet" type="text/css" href="../static/CSS/search_bar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -18,9 +16,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
             integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'CSS/search_bar.css' %}">
 </head>
-
-
 <style>
     body {
         background-image: url('{% static "Images/background1.jpg" %}');
@@ -29,15 +26,12 @@
         background-attachment: fixed;
     }
 </style>
-
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="{% url 'search' %}">Travel Agency</a>
+    <a class="navbar-brand" href="{% url 'search' %}" style="margin-left: 30px">Travel Agency</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
         <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse justify-content-end" style="margin-right: 30px" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="{% url 'trips_view' %}">
                 Paketa Turistike
@@ -45,19 +39,25 @@
             <a class="nav-item nav-link active" href="{% url 'aboutus' %}">
                 About Us
             </a>
+            {% if user.is_authenticated %}
+                <a class="nav-item nav-link active" href="{% url 'reservations' %}">
+                    My reservations
+                </a>
+            {% endif %}
             <a class="nav-item nav-link active" href="{% url 'login' %}">
-                User
+                {% if user.is_authenticated %}
+                    {{ user.username|capfirst }}
+                {% else %}
+                    User
+                {% endif %}
             </a>
         </div>
     </div>
 </nav>
-
-
 <div class="container mt-5">
     <div class="jumbotron">
         {% block content %}{% endblock %}
     </div>
 </div>
 </body>
-<link rel="stylesheet" href="{% static 'CSS/search_bar.css' %}">
 </html>

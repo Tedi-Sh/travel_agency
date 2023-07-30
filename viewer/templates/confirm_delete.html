@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="background-color: rgba(255, 255, 255, 0.8); padding: 20px; justify-content: center; border-radius: 10px">
+<h1>Are you sure you want to delete this reservation?</h1>
+
+<p>From: {{ reservation.from_location }}</p>
+<p>To: {{ reservation.to_location }}</p>
+<p>Departure date: {{ reservation.date_of_departure }}</p>
+<p>Return date: {{ reservation.return_date }}</p>
+<p>Hotel: {{ reservation.hotel }}</p>
+
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Yes, delete</button>
+</form>
+
+<a href="{% url 'reservations' %}">No, take me back</a>
+{% endblock %}
+</div>
